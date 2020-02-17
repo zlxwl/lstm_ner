@@ -34,22 +34,22 @@ def build_word_index():
     :return:
     '''
     if not os.path.exists(word_embedding_file):
-        print('word embedding file does not exist, please check your file path ')
+        print 'word embedding file does not exist, please check your file path '
         return
 
-    print('building word index...')
+    print 'building word index...'
     if not os.path.exists(src_vocab_file):
         with open(src_vocab_file, 'w') as source:
             f = open(word_embedding_file, 'r')
             for line in f:
                 values = line.split()
                 word = values[0]  # 取词
-                if type(word) is str:
+                if type(word) is unicode:
                     word = word.encode('utf8')
                 source.write(word + '\n')
         f.close()
     else:
-        print('source vocabulary file has already existed, continue to next stage.')
+        print 'source vocabulary file has already existed, continue to next stage.'
 
     if not os.path.exists(tgt_vocab_file):
         with open(tgt_file, 'r') as source:
@@ -62,12 +62,12 @@ def build_word_index():
                     for w in word_arr:
                         dict_word[w] = dict_word.get(w, 0) + 1
 
-            top_words = sorted(list(dict_word.items()), key=lambda s: s[1], reverse=True)
+            top_words = sorted(dict_word.items(), key=lambda s: s[1], reverse=True)
             with open(tgt_vocab_file, 'w') as s_vocab:
                 for word, frequence in top_words:
                     s_vocab.write(word + '\n')
     else:
-        print('target vocabulary file has already existed, continue to next stage.')
+        print 'target vocabulary file has already existed, continue to next stage.'
 
     if not os.path.exists(model_path):
         os.makedirs(model_path)
@@ -246,7 +246,7 @@ def load_word2vec_embedding(vocab_size):
         加载外接的词向量。
         :return:
     '''
-    print('loading word embedding, it will take few minutes...')
+    print 'loading word embedding, it will take few minutes...'
     embeddings = np.random.uniform(-1,1,(vocab_size + 2, embeddings_size))
     # 保证每次随机出来的数一样。
     rng = np.random.RandomState(23455)
@@ -259,7 +259,7 @@ def load_word2vec_embedding(vocab_size):
             coefs = np.asarray(values[1:], dtype='float32')  # 取向量
         except ValueError:
             # 如果真的这个词出现在了训练数据里，这么做就会有潜在的bug。那coefs的值就是上一轮的值。
-            print(values[0], values[1:])
+            print values[0], values[1:]
 
         embeddings[index] = coefs   # 将词和对应的向量存到字典里
     f.close()
@@ -288,9 +288,9 @@ def write_result_to_file(iterator, tags):
     words = raw_content.split()
     assert len(words) == len(tags)
     for w,t in zip(words, tags):
-        print(w, '(' + t + ')', end=' ')
-    print()
-    print('*' * 100)
+        print w, '(' + t + ')',
+    print
+    print '*' * 100
 
 
 build_word_index()
@@ -322,17 +322,17 @@ if __name__ == '__main__':
 
         # 根据ID查字。
         word = reverse_tgt_vocab_table.lookup(tf.constant(12001, dtype=tf.int64))
-        print(sess.run(word))
+        print sess.run(word)
         for i in range(10):
             try:
                 # source, target = sess.run([iterator.source, iterator.target_input])
                 source = sess.run(iterator.source)
-                print(source.shape, source[0][:5])
+                print source.shape, source[0][:5]
                 # print i, source.shape, target.shape
             except tf.errors.OutOfRangeError:
                 sess.run(iterator.initializer)
                 # source, target = sess.run([iterator.source, iterator.target_input])
                 source = sess.run(iterator.source)
-                print('new:', source.shape, source[0][:5])
+                print 'new:', source.shape, source[0][:5]
 
 

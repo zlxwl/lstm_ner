@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 import tensorflow as tf
 
-tf.app.flags.DEFINE_string("src_file", 'resource/source.txt', "Training data.")
+tf.app.flags.DEFINE_string("src_file", 'resource/predict.txt', "Training data.")
 tf.app.flags.DEFINE_string("tgt_file", 'resource/target.txt', "labels.")
 # 希望做命名识别的数据
 tf.app.flags.DEFINE_string("pred_file", 'resource/predict.txt', "test data.")
