@@ -145,13 +145,19 @@ if __name__ == '__main__':
     action = config.FLAGS.action
     # 获取词的总数。
     vocab_size = get_src_vocab_size()
-    src_unknown_id = tgt_unknown_id = vocab_size
-    src_padding = vocab_size + 1
+    src_unknown_id = tgt_unknown_id = vocab_size # unk_token
+    src_padding = vocab_size + 1 # pad_token
 
+    # 构建词表
     src_vocab_table, tgt_vocab_table = create_vocab_tables(src_vocab_file, tgt_vocab_file, src_unknown_id,
                                                            tgt_unknown_id)
-    embedding = load_word2vec_embedding(vocab_size)
+    # src_vocab_file和tgt_vocab_file都是如下形式的词汇文件
+    # ```
+    # word1
+    # word2
+    # ```
 
+    embedding = load_word2vec_embedding(vocab_size)
     if action == 'train':
         iterator = get_iterator(src_vocab_table, tgt_vocab_table, vocab_size, BATCH_SIZE)
     elif action == 'predict':
@@ -172,5 +178,4 @@ if __name__ == '__main__':
         if action == 'train':
             train(net, iterator, sess)
         elif action == 'predict':
-
             predict(net, tag_table, sess)

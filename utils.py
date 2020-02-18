@@ -3,7 +3,7 @@ import tensorflow as tf
 from tensorflow.python.ops import lookup_ops
 import numpy as np
 import collections
-import config
+from . import config
 import os
 
 src_file = config.FLAGS.src_file
@@ -247,6 +247,7 @@ def load_word2vec_embedding(vocab_size):
         :return:
     '''
     print('loading word embedding, it will take few minutes...')
+    # 加入unk和pad
     embeddings = np.random.uniform(-1,1,(vocab_size + 2, embeddings_size))
     # 保证每次随机出来的数一样。
     rng = np.random.RandomState(23455)
